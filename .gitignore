@@ -1,0 +1,12 @@
+/__pycache__
+/app/__pycache__
+/app/admin/__pycache__
+/app/docs/__pycache__
+/app/store/__pycache__
+/app/user/__pycache__
+
+/venv
+
+/avatar.png
+main.py
+test.py
