@@ -80,7 +80,7 @@ class UserController(_UserValidation):
 class TokenController:
     def __init__(self, obj, jti, created_at):
         self.obj = obj
-        self.jit = jti
+        self.jti = jti
         self.created_at = created_at
 
     

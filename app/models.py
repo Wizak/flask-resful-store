@@ -19,7 +19,6 @@ class UserTable(db.Model):
     password = db.Column(db.Text, nullable=False)
     permission = db.Column(db.Boolean, default=False)
     avatar = db.Column(db.LargeBinary, default=Avatar.get_from_file())
-    cart = db.relationship('CartTable', backref='user', lazy=True)
 
 
 class StoreTable(db.Model):
@@ -45,10 +44,14 @@ class CartTable(db.Model):
         primary_key=True,
         default=uuid.uuid4,
         index=True)
-    skus = db.Column(db.ARRAY(db.String), nullable=False, index=True)
     user_id = db.Column(
         UUID(as_uuid=True),
         db.ForeignKey('users.id'),
+        default=uuid.uuid4,
+        index=True)
+    store_id = db.Column(
+        UUID(as_uuid=True),
+        db.ForeignKey('products.id'),
         default=uuid.uuid4,
         index=True)
 

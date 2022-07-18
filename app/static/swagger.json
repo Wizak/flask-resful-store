@@ -1,0 +1,804 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Store App",
+        "version": "1.0.0",
+        "title": "Flask Store Ap Docs",
+        "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id_user": {
+                        "type": "string (uuid)"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "permission": {
+                        "type": "boolean (default=False)"
+                    },
+                    "avatar": {
+                        "type": "binary"
+                    }
+                }
+            },
+            "Store":{
+                "type" : "object",
+                "properties": {
+                    "id_product": {
+                        "type": "string (uuid)"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "sku": {
+                        "type": "array (string)"
+                    }
+                }
+            },
+            "Cart": {
+                "type": "object",
+                "properties": {
+                    "id_cart": {
+                        "type": "string (uuid)"
+                    },
+                    "user_id": {
+                        "type": "string (uuid)"
+                    },
+                    "store_id": {
+                        "type": "string (uuid)"
+                    }
+                }
+            },
+            "TokenBlockList": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "jti": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "datetime"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/user/": {
+            "post": {
+                "tags": [
+                    "Add todo to API"
+                ],
+                "summary": "Add user",
+                "requestBody": {
+                    "description": "Post New User To Database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/TodoList"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "Authorization user"
+                ],
+                "summary": "Response token for authorizated user",
+                "requestBody": {
+                    "description": "Post user data for authorization",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "access-token",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "delete": {
+                "tags": [
+                    "Unauthorization user"
+                ],
+                "summary": "Delete token for authorized user",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful logout",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/account": {
+            "get": {
+                "tags": [
+                    "Get Account User"
+                ],
+                "summary": "Show username and avatar of user",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User profile",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Update Account User"
+                ],
+                "summary": "Update user account",
+                "requestBody": {
+                    "description": "access-token, username and avatar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful updating",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Delete Account User"
+                ],
+                "summary": "Delete user account",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful deleting",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "tags": [
+                    "Show Users"
+                ],
+                "summary": "Show username of users",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Users username",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/<username>": {
+            "get": {
+                "tags": [
+                    "Show User In Users"
+                ],
+                "summary": "Show username of user",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User username",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/<secretkey>": {
+            "post": {
+                "tags": [
+                    "Add Admin To DataBase"
+                ],
+                "summary": "Add admin",
+                "requestBody": {
+                    "description": "Post New Admin To Database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/TodoList"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/login": {
+            "post": {
+                "tags": [
+                    "Authorization admin"
+                ],
+                "summary": "Response token for authorizated admin",
+                "requestBody": {
+                    "description": "Post admin data for authorization",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "access-token",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/logout": {
+            "delete": {
+                "tags": [
+                    "Unauthorization admin"
+                ],
+                "summary": "Delete token for authorized admin",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful logout",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/account": {
+            "get": {
+                "tags": [
+                    "Get Account Admin"
+                ],
+                "summary": "Show username and avatar of admin",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admin profile",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Update Account Admin"
+                ],
+                "summary": "Update admin account",
+                "requestBody": {
+                    "description": "access-token, username and avatar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful updating",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Delete Account Admin"
+                ],
+                "summary": "Delete admin account",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful deleting",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/": {
+            "get": {
+                "tags": [
+                    "Show Admins"
+                ],
+                "summary": "Show username of admins",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admins username",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/<username>": {
+            "get": {
+                "tags": [
+                    "Show Admin In Admins"
+                ],
+                "summary": "Show username of admin",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admin username",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/product": {
+            "post": {
+                "tags": [
+                    "Add Product In DataBase"
+                ],
+                "summary": "Create product to store by admin",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful adding product to store",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/store/": {
+            "get": {
+                "tags": [
+                    "Show Products In Store"
+                ],
+                "summary": "Show all product from store",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Products",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+        },
+        "/store/<product>": {
+            "get": {
+                "tags": [
+                    "Show Product By Name In Store"
+                ],
+                "summary": "Show product from store",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+        },
+        "/store/cart": {
+            "get": {
+                "tags": [
+                    "Show Cart User"
+                ],
+                "summary": "Show products from user cart",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cart",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+        },
+        "/store/cart/<product>": {
+            "post": {
+                "tags": [
+                    "Add Product To Cart"
+                ],
+                "summary": "Post product by name to user cart",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Delete Product From Cart"
+                ],
+                "summary": "Deleting product",
+                "requestBody": {
+                    "description": "access-token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful deleting product from cart",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

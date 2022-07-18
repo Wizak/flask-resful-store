@@ -10,7 +10,10 @@ bc = Bcrypt()
 jwt = JWTManager()
 
 from app import routes
-from app.models import UserTable, TokenBlocklist, StoreTable, CartTable
+from app.models import UserTable
+from app.models import TokenBlocklist
+from app.models import StoreTable
+from app.models import CartTable
 
 
 def create_app(config_settings):
@@ -22,9 +25,11 @@ def create_app(config_settings):
     bc.init_app(app)
     jwt.init_app(app)
 
+
     @app.before_first_request
     def db_create():
         db.create_all()
+
 
     from app.user import user_bp
     app.register_blueprint(user_bp)
@@ -40,5 +45,6 @@ def create_app(config_settings):
 
     from app.docs import swaggerui_bp
     app.register_blueprint(swaggerui_bp)
+
 
     return app

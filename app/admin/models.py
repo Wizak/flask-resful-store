@@ -28,7 +28,8 @@ class Store(StoreTable):
     def __init__(self, **kwds):
         self.name = kwds['name']
         self.sku = kwds['sku']
-        self.description = kwds['description']
+        if 'description' in kwds:
+            self.description = kwds['description']
     
     
     def dict_to_json(self):

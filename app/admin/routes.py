@@ -24,21 +24,6 @@ from datetime import datetime
 from datetime import timezone
 
 
-@admin_api.resource('/<secret>')
-class AdminCreate(Resource):
-    def post(self, secret):
-        if secret == current_app.config['ADMIN_SECRET_KEY']:
-            data = json.loads(request.data)
-            if 'username' in data and 'password' in data:
-                control = AdminController(Admin, data)
-                check = control.register()
-                if check:
-                    return jsonify(msg='successful registration')
-                return jsonify(msg='username is exist')
-            return jsonify(msg='bad fields')
-        return jsonify(msg='incorrect admin key')
-
-
 @admin_api.resource('/login')
 class AdminLogin(Resource):
     def post(self):
@@ -59,7 +44,7 @@ class AdminLogout(Resource):
         now = datetime.now(timezone.utc)
         control = TokenController(TokenBlocklist, jti, now)
         control.add_to_db()
-        return jsonify(msg="JWT revoked")
+        return jsonify(msg="JWT revoked"), 202
 
 
 @admin_api.resource('/account')
@@ -70,9 +55,9 @@ class AdminAccount(Resource):
             control = AdminController(Admin)
             user = control.query(current_user.username)
             if user:
-                return jsonify(user.dict_to_json())
-            return jsonify(msg='user invalid')
-        return jsonify(msg='user is not loggined')
+                return jsonify(user.dict_to_json()), 200
+            return jsonify(msg='user invalid'), 202
+        return jsonify(msg='user is not loggined'), 202
 
 
     @jwt_required()
@@ -82,9 +67,9 @@ class AdminAccount(Resource):
             control = AdminController(Admin, {'username': current_user.username})
             check = control.update_account(data)
             if check:
-                return jsonify(msg='Succesful updating account')
-            return jsonify(msg='Invalid data')
-        return jsonify(msg='user is not loggined')
+                return jsonify(msg='Succesful updating account'), 200
+            return jsonify(msg='Invalid data'), 202
+        return jsonify(msg='user is not loggined'), 202
     
 
     @jwt_required()
@@ -93,9 +78,9 @@ class AdminAccount(Resource):
             control = AdminController(Admin)
             check = control.delete_account(current_user.username)
             if check:
-                return jsonify(msg='Successful delete user')
-            return jsonify(msg='Invalid data')
-        return jsonify(msg='user is not loggined')
+                return jsonify(msg='Successful delete user'), 200
+            return jsonify(msg='Invalid data'), 202
+        return jsonify(msg='user is not loggined'), 202
 
 
 
@@ -111,9 +96,9 @@ class AdminsShow(Resource):
                     {'username': user.username}
                     for user in users
                 ]
-                return jsonify(users_show)
-            return jsonify(msg='users is empty')
-        return jsonify(msg='user is not loggined')
+                return jsonify(users_show), 200
+            return jsonify(msg='users is empty'), 202
+        return jsonify(msg='user is not loggined'), 202
 
 
 @admin_api.resource('/<username>')
@@ -124,9 +109,9 @@ class AdminShow(Resource):
             control = AdminController(Admin)
             user = control.query(username)
             if user:
-                return jsonify(username=user.username, avatar=user.bin_to_json(user.avatar))
-            return jsonify(msg='username is invalid')
-        return jsonify(msg='user is not loggined')
+                return jsonify(username=user.username, avatar=user.bin_to_json(user.avatar)), 200
+            return jsonify(msg='username is invalid'), 202
+        return jsonify(msg='user is not loggined'), 202
 
 
 @admin_api.resource('/product')
@@ -137,5 +122,20 @@ class AdminProduct(Resource):
             control = StoreController(Store, data)
             check = control.add_product()
             if check:
-                return jsonify(msg='successful adding')
-            return jsonify(msg='request products is empty')
+                return jsonify(msg='successful adding'), 200
+            return jsonify(msg='request products is empty'), 202
+
+
+@admin_api.resource('/<secret>')
+class AdminCreate(Resource):
+    def post(self, secret):
+        if secret == current_app.config['ADMIN_SECRET_KEY']:
+            data = json.loads(request.data)
+            if 'username' in data and 'password' in data:
+                control = AdminController(Admin, data)
+                check = control.register()
+                if check:
+                    return jsonify(msg='successful registration'), 200
+                return jsonify(msg='username is exist'), 202
+            return jsonify(msg='bad fields'), 202
+        return jsonify(msg='incorrect admin key'), 202

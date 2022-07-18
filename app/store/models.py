@@ -4,8 +4,9 @@ from app.models import StoreTable, CartTable
 class Store(StoreTable):
     def __init__(self, **kwds):
         self.name = kwds['name']
-        self.description = kwds['description']
         self.sku = kwds['sku']
+        if 'description' in kwds:
+            self.description = kwds['description']       
 
 
     def dict_to_json(self):
@@ -18,5 +19,6 @@ class Store(StoreTable):
 
 class Cart(CartTable):
     def __init__(self, **kwds):
-        self.skus = kwds['skus']
+        self.user_id = kwds['user_id']
+        self.store_id = kwds['store_id']
     
