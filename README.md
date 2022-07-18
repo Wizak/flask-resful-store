@@ -15,7 +15,7 @@ pip install -r requirements.txt
 python run.py
 ```
 ---
-## First needs to create user 
+## First need to create user 
 ```
 /user/
 methods: POST
@@ -68,7 +68,7 @@ methods: GET
 methods: POST, DELETE
 ```
 ---
-## If u need to create product in store
+## If u need to create product to store
 ```
 /admin/<product>
 methods: POST
