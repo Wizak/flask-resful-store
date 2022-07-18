@@ -1,10 +1,10 @@
 # flask-resful-store
 ---
-## Install libs
+## Install Dependency
 ```
 pip install -r requirements.txt
 ```
-## Run run.py
+## Run Server
 ```
 python run.py
 ```
@@ -66,4 +66,9 @@ methods: POST, DELETE
 ```
 /admin/<product>
 methods: POST
+```
+## To check docs
+```
+/api/docs
+methods: GET
 ```
