@@ -42,7 +42,14 @@ class AdminController(_AdminValidation):
             if admin:
                 check = bc.check_password_hash(admin.password, self.data['password'])
                 return all([check, self.obj.permission])
-        print('[+] WARNING: may be missed content')      
+        print('[+] WARNING: may be missed content')     
+    
+    
+    def update_account(self, username):
+        admin = self.query(self.data['username'])
+        admin.username = username
+        db.session.commit()
+        return True
 
 
     def delete_account(self, username):

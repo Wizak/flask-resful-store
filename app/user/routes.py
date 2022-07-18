@@ -31,9 +31,9 @@ class UserCreate(Resource):
             control = UserController(User, data)
             check = control.register()
             if check:
-                return jsonify(msg='successful registration'), 200
-            return jsonify(msg='username is exist'), 200
-        return jsonify(msg='Bad fields'), 202
+                return jsonify(msg='successful registration')
+            return jsonify(msg='username is exist')
+        return jsonify(msg='Bad fields')
 
 
 @user_api.resource('/login')
@@ -44,7 +44,7 @@ class UserLogin(Resource):
         check = control.login()
         if check:
             access_token = create_access_token(identity=control.get_user)
-            return jsonify(access_token=access_token), 200
+            return jsonify(access_token=access_token)
         return jsonify(msg='username or password is invalid')
 
 
@@ -56,7 +56,7 @@ class UserLogout(Resource):
         now = datetime.now(timezone.utc)
         control = TokenController(TokenBlocklist, jti, now)
         control.add_to_db()
-        return jsonify(msg="JWT revoked"), 202
+        return jsonify(msg="JWT revoked")
 
 
 @user_api.resource('/account')
@@ -67,9 +67,9 @@ class UserAccount(Resource):
             control = UserController(User)
             user = control.query(current_user.username)
             if user:
-                return jsonify(user.dict_to_json()), 200
-            return jsonify(msg='user invalid'), 202
-        return jsonify(msg='user is not loggined'), 200
+                return jsonify(user.dict_to_json())
+            return jsonify(msg='user invalid')
+        return jsonify(msg='user is not loggined')
 
 
     @jwt_required()
@@ -79,9 +79,9 @@ class UserAccount(Resource):
             control = UserController(User, {'username': current_user.username})
             check = control.update_account(data)
             if check:
-                return jsonify(msg='Succesful updating account'), 200
-            return jsonify(msg='Invalid data'), 202
-        return jsonify(msg='user is not loggined'), 202
+                return jsonify(msg='Succesful updating account')
+            return jsonify(msg='Invalid data')
+        return jsonify(msg='user is not loggined')
     
 
     @jwt_required()
@@ -90,9 +90,9 @@ class UserAccount(Resource):
             control = UserController(User)
             check = control.delete_account(current_user.username)
             if check:
-                return jsonify(msg='Successful delete user'), 200
-            return jsonify(msg='Invalid data'), 202
-        return jsonify(msg='user is not loggined'), 202
+                return jsonify(msg='Successful delete user')
+            return jsonify(msg='Invalid data')
+        return jsonify(msg='user is not loggined')
 
 
 
@@ -108,9 +108,9 @@ class UsersShow(Resource):
                     {'username': user.username}
                     for user in users
                 ]
-                return jsonify(users_show), 200
-            return jsonify(msg='users is empty'), 202
-        return jsonify(msg='user is not loggined'), 202
+                return jsonify(users_show)
+            return jsonify(msg='users is empty')
+        return jsonify(msg='user is not loggined')
 
 
 @users_api.resource('/<username>')
@@ -121,6 +121,6 @@ class UserShow(Resource):
             control = UserController(User)
             user = control.query(username)
             if user:
-                return jsonify(username=user.username, avatar=user.bin_to_json(user.avatar)), 200
-            return jsonify(msg='username is invalid'), 202
-        return jsonify(msg='user is not loggined'), 202
+                return jsonify(username=user.username, avatar=user.bin_to_json(user.avatar))
+            return jsonify(msg='username is invalid')
+        return jsonify(msg='user is not loggined')

@@ -24,8 +24,8 @@ class StoreShow(Resource):
         products = control.get_products()
         if products:
             product = [p.dict_to_json() for p in products]
-            return jsonify(product), 200
-        return jsonify(msg='Store is empty'), 202
+            return jsonify(product)
+        return jsonify(msg='Store is empty')
 
 
 @store_api.resource('/<product>')
@@ -34,8 +34,8 @@ class ProductShow(Resource):
         control = StoreController(Store)
         product_query = control.get_products(product)
         if product_query:
-            return jsonify(product_query.dict_to_json()), 200
-        return jsonify(msg='Store is empty'), 202
+            return jsonify(product_query.dict_to_json())
+        return jsonify(msg='Store is empty')
 
 
 @store_api.resource('/cart')
@@ -51,9 +51,9 @@ class CartShow(Resource):
                 product = Store.query.filter_by(id_product=p.store_id).one_or_none()
                 products.append(product.dict_to_json())
             if products:
-                return jsonify(products), 200
-            return jsonify(msg='Cart is empty'), 202
-        return jsonify(msg='Cart is empty'), 202
+                return jsonify(products)
+            return jsonify(msg='Cart is empty')
+        return jsonify(msg='Cart is empty')
 
 
 @store_api.resource('/cart/<product>')
@@ -67,15 +67,15 @@ class CartModify(Resource):
         product = control_store.get_products(product)
 
         if product is None:
-            return jsonify(msg='Product name is invalid'), 202
+            return jsonify(msg='Product name is invalid')
 
         data = dict(product=product, user=user)
         control_cart = CartController(Cart, data)
         check = control_cart.add_to_cart()
 
         if check:
-            return jsonify(msg='Successful adding product ot cart'), 200
-        return jsonify(msg='Product is not exist or/and is already exist in a cart'), 202
+            return jsonify(msg='Successful adding product ot cart')
+        return jsonify(msg='Product is not exist or/and is already exist in a cart')
 
 
     @jwt_required()
@@ -87,12 +87,12 @@ class CartModify(Resource):
         product = control_store.get_products(product)
 
         if product is None:
-            return jsonify(msg='Product name is invalid'), 202
+            return jsonify(msg='Product name is invalid')
 
         data = dict(product=product, user=user)
         control_cart = CartController(Cart, data)
         check = control_cart.delete_from_cart()
 
         if check:
-            return jsonify(msg='Successful delete product from cart'), 200
-        return jsonify(msg='Product is not exist or/and is already exist in a cart'), 202
+            return jsonify(msg='Successful delete product from cart')
+        return jsonify(msg='Product is not exist or/and is already exist in a cart')
