@@ -1,5 +1,11 @@
 # flask-resful-store
 ---
+## Setting Virtual Environment for Python3.6
+```
+virtualenv --python="/usr/bin/python3.6"
+venv\Scripts\Activate
+```
+---
 ## Install Dependency
 ```
 pip install -r requirements.txt
