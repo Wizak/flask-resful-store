@@ -1,4 +1,9 @@
 # flask-resful-store
+## Video Instruction For Use
+```
+https://user-images.githubusercontent.com/66076836/179434436-11b48696-f2a4-4556-8fd0-e364b98086db.mp4
+
+```
 ---
 ## Setting Virtual Environment for Python3.6
 ```
