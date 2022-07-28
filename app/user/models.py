@@ -12,7 +12,7 @@ class User(UserTable):
 
 
     def bin_to_json(self, element):
-        return b64encode(element).decode("utf8")
+        return b64encode(element).decode("UTF-8")
 
 
     def json_to_bin(self, element):

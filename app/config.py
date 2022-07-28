@@ -2,6 +2,7 @@ from datetime import timedelta
 
 
 class Config:
+    APPLICATION_ROOT = '/api/v1'
     ADMIN_SECRET_KEY = 'adminsecretkey'
     JWT_SECRET_KEY = 'SuperSecretKey'
     JWT_ALGORITHM = 'HS256'

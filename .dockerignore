@@ -1,7 +1,10 @@
 **/__pycache__
 
 /venv
+.git
 
 /avatar.png
+.gitignore
+
 swagger_test.py
 avatar_test.py

@@ -1,7 +1,7 @@
 from flask_swagger_ui import get_swaggerui_blueprint
 
 
-SWAGGER_URL = "/api/docs"  # URL for exposing Swagger UI (without trailing '/')
+SWAGGER_URL = "/api/v1/docs"  # URL for exposing Swagger UI (without trailing '/')
 API_URL = (
     "/static/swagger.json"
 )  # Our API url (can of course be a local resource)
@@ -10,7 +10,7 @@ API_URL = (
 swaggerui_bp = get_swaggerui_blueprint(
     SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
     API_URL,
-    config={"app_name": "Test application"},  # Swagger UI config overrides
+    config={"app_name": "Store application"},  # Swagger UI config overrides
     # oauth_config={  # OAuth config. See swagger-ui docs.
     #    'clientId': "your-client-id",
     #    'clientSecret': "your-client-secret-if-required",

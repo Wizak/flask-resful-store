@@ -1,6 +1,5 @@
 from flask import jsonify
 from flask import Blueprint
-from flask import make_response
 
 from app import jwt
 from app import db
@@ -9,17 +8,12 @@ from app.models import TokenBlocklist
 from app.models import UserTable
 
 
-errors_bp = Blueprint('error', __name__)
+main_bp = Blueprint('main', __name__)
 
 
-@errors_bp.errorhandler(404)
-def handler_404_error(_error):
-    return make_response(jsonify(msg='Invalid endpoint')), 404
-
-
-@errors_bp.errorhandler(500)
-def handler_500_error(_error):
-    return make_response(jsonify(msg='Server error')), 500
+@main_bp.before_app_first_request
+def db_create():
+    db.create_all()
 
 
 @jwt.token_in_blocklist_loader
